@@ -31,7 +31,7 @@ Simply clone the repository and install the dependencies:
 
 ```bash
 nvm use 20
-npm install
+yarn install
 ```
 
 ## Local Development
@@ -46,7 +46,7 @@ Simply run the start script:
 
 ```bash
 nvm use 20
-npm run start
+yarn start
 ```
 
 Then, visit `http://localhost:3000` to see the app in action.
@@ -57,5 +57,5 @@ Simply run the build script:
 
 ```bash
 nvm use 20
-npm run build
+yarn build
 ```
