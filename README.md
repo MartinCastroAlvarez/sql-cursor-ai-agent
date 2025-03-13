@@ -1,6 +1,4 @@
-# sql-cursor-ai-agent
-
-SQL builder AI agent
+# SQL Agent
 
 ![wallpaper.jpg](./wallpaper.jpg)
 
@@ -37,6 +35,12 @@ npm install
 ```
 
 ## Local Development
+
+Set the following environment variable:
+
+```bash
+export OPENAI_API_KEY=<"our-openai-api-key"
+```
 
 Simply run the start script:
 
