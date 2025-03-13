@@ -1,4 +1,6 @@
 import React, { useState, KeyboardEvent } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 // Input component defined inside App.tsx
 const Input: React.FC<{ onSubmit: (query: string) => void }> = ({ onSubmit }) => {
@@ -18,20 +20,20 @@ const Input: React.FC<{ onSubmit: (query: string) => void }> = ({ onSubmit }) =>
   };
 
   return (
-    <div className="flex w-full max-w-md">
+    <div className="flex w-full max-w-md bg-carbon-gray-100 rounded-lg overflow-hidden">
       <input
         type="text"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Describe the data you want to retrieve..."
-        className="flex-grow px-4 py-2 text-carbon-gray-100 bg-carbon-gray-10 border border-carbon-gray-30 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-carbon-blue-60 focus:border-transparent"
+        className="flex-grow px-4 py-2 text-carbon-gray-10 bg-carbon-gray-100 border-none focus:outline-none focus:ring-0"
       />
       <button
         onClick={handleInputSubmit}
-        className="px-4 py-2 font-semibold text-white bg-carbon-blue-60 rounded-r-lg hover:bg-carbon-blue-70 focus:outline-none focus:ring-2 focus:ring-carbon-blue-40 focus:ring-opacity-50 transition-colors duration-200"
+        className="px-3 py-2 text-carbon-blue-30 bg-carbon-gray-100 hover:bg-carbon-gray-90 focus:outline-none transition-colors duration-200"
       >
-        Generate SQL
+        <FontAwesomeIcon icon={faPaperPlane} />
       </button>
     </div>
   );
@@ -41,7 +43,6 @@ const Input: React.FC<{ onSubmit: (query: string) => void }> = ({ onSubmit }) =>
 const Editor: React.FC<{ sql: string }> = ({ sql }) => {
   return (
     <div className="bg-carbon-gray-90 text-carbon-blue-30 p-6 rounded-lg shadow-md h-full">
-      <h3 className="text-lg font-medium text-carbon-gray-10 mb-4">Generated SQL</h3>
       <div className="bg-carbon-gray-100 text-carbon-blue-30 p-4 rounded overflow-x-auto">
         <pre>{sql || "-- Your SQL will appear here"}</pre>
       </div>
@@ -71,12 +72,7 @@ const App: React.FC = () => {
           {/* Right column (Input) */}
           <div className="w-full md:w-1/2 order-1 md:order-2">
             <div className="bg-carbon-gray-80 rounded-lg shadow-md p-6 h-full">
-              <h2 className="text-xl font-medium text-carbon-gray-10 mb-4">Build Your SQL Query</h2>
-              <p className="text-carbon-gray-30 mb-6">
-                Enter your request in natural language, and our AI will help you create the SQL query you need.
-              </p>
-              
-              <div className="mb-6">
+              <div className="flex justify-center items-center h-full">
                 <Input onSubmit={handleSubmit} />
               </div>
             </div>
