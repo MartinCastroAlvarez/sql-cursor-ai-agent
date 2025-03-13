@@ -1,54 +1,6 @@
-import React, { useState, KeyboardEvent } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-
-// Input component defined inside App.tsx
-const Input: React.FC<{ onSubmit: (query: string) => void }> = ({ onSubmit }) => {
-  const [inputValue, setInputValue] = useState<string>('');
-
-  const handleInputSubmit = () => {
-    if (inputValue.trim()) {
-      onSubmit(inputValue);
-      setInputValue('');
-    }
-  };
-
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleInputSubmit();
-    }
-  };
-
-  return (
-    <div className="flex w-full max-w-md bg-carbon-gray-100 rounded-lg overflow-hidden">
-      <input
-        type="text"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="Describe the data you want to retrieve..."
-        className="flex-grow px-4 py-2 text-carbon-gray-10 bg-carbon-gray-100 border-none focus:outline-none focus:ring-0"
-      />
-      <button
-        onClick={handleInputSubmit}
-        className="px-3 py-2 text-carbon-blue-30 bg-carbon-gray-100 hover:bg-carbon-gray-90 focus:outline-none transition-colors duration-200"
-      >
-        <FontAwesomeIcon icon={faPaperPlane} />
-      </button>
-    </div>
-  );
-};
-
-// Editor component defined inside App.tsx
-const Editor: React.FC<{ sql: string }> = ({ sql }) => {
-  return (
-    <div className="bg-carbon-gray-90 text-carbon-blue-30 p-6 rounded-lg shadow-md h-full">
-      <div className="bg-carbon-gray-100 text-carbon-blue-30 p-4 rounded overflow-x-auto">
-        <pre>{sql || "-- Your SQL will appear here"}</pre>
-      </div>
-    </div>
-  );
-};
+import React, { useState } from 'react';
+import Input from './Input';
+import Editor from './Editor';
 
 const App: React.FC = () => {
   const [generatedSQL, setGeneratedSQL] = useState<string>('');
