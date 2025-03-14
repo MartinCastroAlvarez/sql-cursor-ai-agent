@@ -5,10 +5,11 @@ import { Message as MessageType } from "./useConversation";
 
 interface ChatProps {
   messages: MessageType[];
-  onSendMessage: (message: string) => void;
+  onSend: (message: string) => void;
+  onApply: (message: string, code: string) => void;
 }
 
-const Chat: React.FC<ChatProps> = ({ messages, onSendMessage }) => {
+const Chat: React.FC<ChatProps> = ({ messages, onSend, onApply }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when messages change
@@ -25,7 +26,7 @@ const Chat: React.FC<ChatProps> = ({ messages, onSendMessage }) => {
             key={index}
             className={`${message.sender === "USER" ? "ml-auto" : "mr-auto"} max-w-[80%]`}
           >
-            <Message text={message.text} sender={message.sender} />
+            <Message text={message.text} sender={message.sender} onApply={onApply} />
           </div>
         ))}
         {/* Empty div for scroll reference */}
@@ -34,7 +35,7 @@ const Chat: React.FC<ChatProps> = ({ messages, onSendMessage }) => {
 
       {/* Input container - fixed at bottom */}
       <div className="p-2">
-        <Input onSubmit={onSendMessage} />
+        <Input onSubmit={onSend} />
       </div>
     </div>
   );

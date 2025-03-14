@@ -21,6 +21,14 @@ const App: React.FC = () => {
     [setSql],
   );
 
+
+  const handleApply = useCallback(
+    (message: string, code: string) => {
+      console.log(`Applying code: ${code} for message: ${message}`);
+    },
+    [],
+  );
+
   // Handle sending a message in the chat
   const handleSendMessage = useCallback(
     (text: string) => {
@@ -58,7 +66,7 @@ const App: React.FC = () => {
           {/* Right column (Chat) - replaced Input with Chat */}
           <div className="w-full md:w-1/2 order-1 md:order-2 h-[calc(100vh-2rem)]">
             <div className="bg-gradient-to-b from-carbon-gray-90 to-carbon-gray-80 p-8 rounded-lg shadow-md h-full">
-              <Chat messages={conversation} onSendMessage={handleSendMessage} />
+              <Chat messages={conversation} onSend={handleSendMessage} onApply={handleApply} />
             </div>
           </div>
         </div>

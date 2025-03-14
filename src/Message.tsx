@@ -21,14 +21,52 @@ interface CodeProps {
 interface MessageProps {
   text: string;
   sender: "USER" | "AGENT";
-  onApply?: (message: string, code: string) => void;
+  onApply: (message: string, code: string) => void;
 }
 
-// Enhanced CodeToolbar with Tippy tooltips - button colors updated
-const CodeToolbar: React.FC<{ onCopy: () => void; onApply?: () => void }> = ({
-  onCopy,
+const extractText = (node: any): string => {
+  // If node is null or undefined, return empty string
+  if (node === null || node === undefined) return "";
+  
+  // If it's a string or number, return it directly
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  
+  // If it's an array, process each item and join
+  if (Array.isArray(node)) {
+    return node.map(item => extractText(item)).join('');
+  }
+  
+  // If it's a React element with props and children
+  if (node.props && node.props.children) {
+    return extractText(node.props.children);
+  }
+  
+  // If it's a plain object but not a React element (shouldn't normally happen)
+  if (typeof node === 'object') {
+    return '';
+  }
+  
+  // Default case
+  return '';
+};
+
+// Enhanced Toolbar with Tippy tooltips - button colors updated
+const Toolbar: React.FC<{ code: string; onApply: (code: string) => void }> = ({
+  code,
   onApply,
 }) => {
+  const handleCopy = () => {
+    // Ensure we're copying the raw string content of the code
+    const codeToCopy = typeof code === 'string' ? code : String(code);
+    navigator.clipboard.writeText(codeToCopy)
+      .then(() => {
+        console.log('Code copied to clipboard');
+      })
+      .catch(err => {
+        console.error('Failed to copy text: ', err);
+      });
+  };
+
   return (
     <div className="flex justify-end mb-2 space-x-2">
       <Tippy
@@ -40,14 +78,12 @@ const CodeToolbar: React.FC<{ onCopy: () => void; onApply?: () => void }> = ({
         duration={[200, 0]}
       >
         <button
-          onClick={onCopy}
+          onClick={handleCopy}
           className="px-2 py-1 text-white bg-carbon-blue-60 hover:bg-carbon-blue-50 rounded focus:outline-none transition-colors duration-200"
         >
           <FontAwesomeIcon icon={faCopy} size="sm" />
         </button>
       </Tippy>
-
-      {onApply && (
         <Tippy
           content="Apply this code"
           theme="carbon"
@@ -57,18 +93,17 @@ const CodeToolbar: React.FC<{ onCopy: () => void; onApply?: () => void }> = ({
           duration={[200, 0]}
         >
           <button
-            onClick={onApply}
+            onClick={() => onApply(code)}
             className="px-2 py-1 text-white bg-carbon-green-60 hover:bg-carbon-green-50 rounded focus:outline-none transition-colors duration-200"
           >
             <FontAwesomeIcon icon={faPlay} size="sm" />
           </button>
         </Tippy>
-      )}
     </div>
   );
 };
 
-const Message: React.FC<MessageProps> = ({ text, sender, onApply }) => {
+const Message: React.FC<MessageProps> = ({ text, sender, onApply }: MessageProps) => {
   return (
     <div
       className={`message p-4 rounded-lg ${sender === "USER" ? "bg-carbon-blue-90" : "bg-carbon-gray-90"} text-carbon-gray-10 mb-4 relative`}
@@ -98,9 +133,23 @@ const Message: React.FC<MessageProps> = ({ text, sender, onApply }) => {
             }: CodeProps) => {
               const match = /language-(\w+)/.exec(className || "");
               className = `bg-[#1e2030] rounded-md overflow-x-auto ${className}`;
+              console.log(children);
+              console.log(props);
+              console.log(node);
+              console.log(inline);
+              console.log(className);
+              console.log(match);
+              
+
+              
+              // For code blocks, get the raw text content
+              const raw = Array.isArray(children) 
+                ? children.map(child => typeof child === 'string' ? child : extractText(child)).join('')
+                : String(children).replace(/\n$/, '');
+              
               return !inline && match ? (
                 <pre className="rounded-md overflow-x-auto">
-                  <CodeToolbar onCopy={() => {}} onApply={() => {}} />
+                  <Toolbar code={raw} onApply={(code) => onApply(text, code)} />
                   <code className={className} {...props}>
                     {children}
                   </code>
