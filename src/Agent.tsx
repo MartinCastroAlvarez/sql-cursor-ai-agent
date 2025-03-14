@@ -88,7 +88,9 @@ ${currentSql}
 \`\`\`
 
 When providing SQL code, always use code blocks with the \`\`\`sql format. Never use inline code snippets.
-Be helpful, clear, and focus on generating accurate SQL queries that solve the user's problem.`,
+Be helpful, clear, and focus on generating accurate SQL queries that solve the user's problem.
+
+Always provide at least 1 code snippet in your response.`,
       date: new Date(),
       sender: 'AGENT'
     };

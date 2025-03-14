@@ -36,6 +36,7 @@ export class Api {
    * @returns Promise with the AI response message
    */
   public async getCompletion(conversation: Message[]): Promise<Message> {
+    console.log("Asking OpenAI", conversation);
     try {
       const response = await fetch(this.apiUrl, {
         method: 'POST',

@@ -7,9 +7,10 @@ interface ChatProps {
   messages: MessageType[];
   onSend: (message: string) => void;
   onApply: (code: string) => void;
+  isLoading: boolean;
 }
 
-const Chat: React.FC<ChatProps> = ({ messages, onSend, onApply }) => {
+const Chat: React.FC<ChatProps> = ({ messages, onSend, onApply, isLoading }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when messages change
@@ -35,7 +36,13 @@ const Chat: React.FC<ChatProps> = ({ messages, onSend, onApply }) => {
 
       {/* Input container - fixed at bottom */}
       <div className="p-2">
-        <Input onSubmit={onSend} />
+        {isLoading ? (
+          <div className="flex justify-center items-center p-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        ) : (
+          <Input onSubmit={onSend} />
+        )}
       </div>
     </div>
   );

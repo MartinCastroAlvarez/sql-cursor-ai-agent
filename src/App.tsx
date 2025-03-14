@@ -12,28 +12,43 @@ const INITIAL_SQL = "-- Your SQL will appear here";
 const App: React.FC = () => {
   const [sql, setSql] = useState<string>(INITIAL_SQL);
   const [conversation, addMessage] = useConversation();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleApply = useCallback(
     async (code: string) => {
-      const newSql = await editorAgent.apply({sqlChanges: code, currentSql: sql});
-      setSql(newSql);
-      console.log(`Applying code: ${code}`);
+      if (isLoading) return; // Prevent operation if already loading
+      
+      try {
+        setIsLoading(true);
+        const newSql = await editorAgent.apply({sqlChanges: code, currentSql: sql});
+        setSql(newSql);
+        console.log(`Applying code: ${code}`);
+      } finally {
+        setIsLoading(false);
+      }
     },
-    [sql],
+    [sql, isLoading],
   );
 
   // Handle sending a message in the chat
   const handleSend = useCallback(
     async (text: string) => {
-      addMessage({
-        text,
-        date: new Date(),
-        sender: "USER",
-      });
-      const response = await analystAgent.ask({currentSql: sql, conversation: [...conversation, {text, date: new Date(), sender: "USER"}]});
-      addMessage(response);
+      if (isLoading) return; // Prevent operation if already loading
+      
+      try {
+        setIsLoading(true);
+        addMessage({
+          text,
+          date: new Date(),
+          sender: "USER",
+        });
+        const response = await analystAgent.ask({currentSql: sql, conversation: [...conversation, {text, date: new Date(), sender: "USER"}]});
+        addMessage(response);
+      } finally {
+        setIsLoading(false);
+      }
     },
-    [addMessage],
+    [addMessage, sql, conversation, isLoading],
   );
 
   return (
@@ -50,7 +65,7 @@ const App: React.FC = () => {
           {/* Right column (Chat) - replaced Input with Chat */}
           <div className="w-full md:w-1/2 order-1 md:order-2 h-[calc(100vh-2rem)]">
             <div className="bg-gradient-to-b from-carbon-gray-90 to-carbon-gray-80 p-8 rounded-lg shadow-md h-full">
-              <Chat messages={conversation} onSend={handleSend} onApply={handleApply} />
+              <Chat messages={conversation} onSend={handleSend} onApply={handleApply} isLoading={isLoading} />
             </div>
           </div>
         </div>

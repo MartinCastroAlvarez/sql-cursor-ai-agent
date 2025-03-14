@@ -29,7 +29,8 @@ The SQL Agent is the technical expert that:
 
 The web interface is a simple chat interface that allows you to communicate with the User Agent and the SQL Agent.
 
-![example.png](./example.png)
+![example1.png](./example1.png)
+![example2.png](./example2.png)
 
 ## Installation
 

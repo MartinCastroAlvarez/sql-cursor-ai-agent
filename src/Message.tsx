@@ -133,15 +133,7 @@ const Message: React.FC<MessageProps> = ({ text, sender, onApply }: MessageProps
             }: CodeProps) => {
               const match = /language-(\w+)/.exec(className || "");
               className = `bg-[#1e2030] rounded-md overflow-x-auto ${className}`;
-              console.log(children);
-              console.log(props);
-              console.log(node);
-              console.log(inline);
-              console.log(className);
-              console.log(match);
-              
 
-              
               // For code blocks, get the raw text content
               const raw = Array.isArray(children) 
                 ? children.map(child => typeof child === 'string' ? child : extractText(child)).join('')
