@@ -11,7 +11,7 @@ export class EditorAgent {
    * @param currentSql - Current SQL code
    * @returns Promise with the revised SQL code
    */
-  public async code(conversation: Message[], currentSql: string): Promise<string> {
+  public async code({conversation, currentSql}: {conversation: Message[], currentSql: string}): Promise<string> {
     // Create a system message to instruct the model
     const systemMessage: Message = {
       text: `You are an SQL editor assistant. Your task is to modify the current SQL query based on the conversation history.
@@ -39,7 +39,7 @@ ${currentSql}`,
    * @param currentSql - Current SQL code
    * @returns Promise with the revised SQL code
    */
-  public async apply(sqlChanges: string, currentSql: string): Promise<string> {
+  public async apply({sqlChanges, currentSql}: {sqlChanges: string, currentSql: string}): Promise<string> {
     // Create messages for the API call
     const messages: Message[] = [
       {
@@ -73,7 +73,7 @@ export class AnalystAgent {
    * @param conversation - Array of messages in the conversation
    * @returns Promise with the agent's response message
    */
-  public async ask(conversation: Message[]): Promise<Message> {
+  public async ask({conversation, currentSql}: {conversation: Message[], currentSql: string}): Promise<Message> {
     // Create a system message to instruct the model
     const systemMessage: Message = {
       text: `You are an SQL analyst assistant. Your role is to:
@@ -81,6 +81,11 @@ export class AnalystAgent {
 2. Ask clarifying questions when necessary
 3. Provide SQL code suggestions that meet the user's requirements
 4. Explain your SQL suggestions clearly
+
+This is the current SQL query that the user is working on:
+\`\`\`sql
+${currentSql}
+\`\`\`
 
 When providing SQL code, always use code blocks with the \`\`\`sql format. Never use inline code snippets.
 Be helpful, clear, and focus on generating accurate SQL queries that solve the user's problem.`,

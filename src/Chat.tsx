@@ -6,7 +6,7 @@ import { Message as MessageType } from "./useConversation";
 interface ChatProps {
   messages: MessageType[];
   onSend: (message: string) => void;
-  onApply: (message: string, code: string) => void;
+  onApply: (code: string) => void;
 }
 
 const Chat: React.FC<ChatProps> = ({ messages, onSend, onApply }) => {

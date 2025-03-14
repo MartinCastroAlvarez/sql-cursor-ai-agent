@@ -39,7 +39,7 @@ yarn install
 Set the following environment variable:
 
 ```bash
-export OPENAI_API_KEY=<"our-openai-api-key"
+export REACT_APP_OPENAI_API_KEY=<"your-openai-api-key"
 ```
 
 Simply run the start script:

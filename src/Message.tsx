@@ -21,7 +21,7 @@ interface CodeProps {
 interface MessageProps {
   text: string;
   sender: "USER" | "AGENT";
-  onApply: (message: string, code: string) => void;
+  onApply: (code: string) => void;
 }
 
 const extractText = (node: any): string => {
@@ -149,7 +149,7 @@ const Message: React.FC<MessageProps> = ({ text, sender, onApply }: MessageProps
               
               return !inline && match ? (
                 <pre className="rounded-md overflow-x-auto">
-                  <Toolbar code={raw} onApply={(code) => onApply(text, code)} />
+                  <Toolbar code={raw} onApply={onApply} />
                   <code className={className} {...props}>
                     {children}
                   </code>

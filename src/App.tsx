@@ -3,53 +3,37 @@ import Editor from "./Editor";
 import Chat from "./Chat";
 import { useConversation } from "./useConversation";
 import "tippy.js/dist/tippy.css";
-import "./tippy-theme.css"; // We'll create this custom CSS file
+import "./tippy-theme.css";
+import { editorAgent, analystAgent } from "./Agent";
+
+const INITIAL_SQL = "-- Your SQL will appear here";
+
 
 const App: React.FC = () => {
-  const [sql, setSql] = useState<string>("");
+  const [sql, setSql] = useState<string>(INITIAL_SQL);
   const [conversation, addMessage] = useConversation();
 
-  const handleSubmit = useCallback(
-    (query: string) => {
-      console.log(`User submitted: ${query}`);
-      // This would normally call an API or process the query
-      // For now, we'll just set some sample SQL based on the query
-      setSql(
-        `-- SQL generated from: ${query}\nSELECT * FROM users WHERE name LIKE '%${query}%';`,
-      );
-    },
-    [setSql],
-  );
-
-
   const handleApply = useCallback(
-    (message: string, code: string) => {
-      console.log(`Applying code: ${code} for message: ${message}`);
+    async (code: string) => {
+      const newSql = await editorAgent.apply({sqlChanges: code, currentSql: sql});
+      setSql(newSql);
+      console.log(`Applying code: ${code}`);
     },
-    [],
+    [sql],
   );
 
   // Handle sending a message in the chat
-  const handleSendMessage = useCallback(
-    (text: string) => {
-      // Add user message to conversation
+  const handleSend = useCallback(
+    async (text: string) => {
       addMessage({
         text,
         date: new Date(),
         sender: "USER",
       });
-
-      // Process the query to generate SQL
-      handleSubmit(text);
-
-      // Add agent response to conversation
-      addMessage({
-        text: `I've generated SQL for your query: \`\`\`sql\nSELECT * FROM users WHERE name LIKE '%${text}%';\n\`\`\``,
-        date: new Date(),
-        sender: "AGENT",
-      });
+      const response = await analystAgent.ask({currentSql: sql, conversation: [...conversation, {text, date: new Date(), sender: "USER"}]});
+      addMessage(response);
     },
-    [addMessage, handleSubmit],
+    [addMessage],
   );
 
   return (
@@ -66,7 +50,7 @@ const App: React.FC = () => {
           {/* Right column (Chat) - replaced Input with Chat */}
           <div className="w-full md:w-1/2 order-1 md:order-2 h-[calc(100vh-2rem)]">
             <div className="bg-gradient-to-b from-carbon-gray-90 to-carbon-gray-80 p-8 rounded-lg shadow-md h-full">
-              <Chat messages={conversation} onSend={handleSendMessage} onApply={handleApply} />
+              <Chat messages={conversation} onSend={handleSend} onApply={handleApply} />
             </div>
           </div>
         </div>
