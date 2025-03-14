@@ -6,6 +6,45 @@ import { api } from './Api';
  */
 export class EditorAgent {
   /**
+   * Processes agent responses to automatically extract and apply SQL changes
+   * @param conversation - The conversation history
+   * @param currentSql - Current SQL code
+   * @returns Promise with the revised SQL code, or current SQL if no changes needed
+   */
+  public async listen({conversation, currentSql}: {conversation: Message[], currentSql: string}): Promise<string> {
+    // Create a system message to instruct the model
+    const systemMessage: Message = {
+      text: `You are an SQL editor assistant.
+
+This is the full conversation history that you are listening to as a passive observer:
+${conversation.map(c => `${c.sender}: ${c.text}`).join('\n')}
+
+      Your task is to modify the current SQL query based on the conversation history.
+IMPORTANT: Your response must ONLY contain the revised SQL code without any explanations, comments, or markdown formatting.
+Do not include \`\`\`sql or \`\`\` tags. Return only the raw SQL query.
+Current SQL:
+\`\`\`sql
+${currentSql}
+\`\`\`
+
+Based on the conversation history, you must suggest the final version of the SQL query that the user wants.
+Always assume the you are writing 'SELECT FROM' statements.
+`,
+      date: new Date(),
+      sender: 'AGENT'
+    };
+    
+    // Combine system message with conversation
+    const fullConversation = [systemMessage];
+    
+    // Get completion from API
+    const response = await api.getCompletion(fullConversation);
+    
+    // Return just the text (which should be only SQL)
+    return response.text;
+  }
+
+  /**
    * Generates revised SQL based on conversation history and current SQL
    * @param conversation - Array of messages between user and analyst
    * @param currentSql - Current SQL code
@@ -14,7 +53,9 @@ export class EditorAgent {
   public async code({conversation, currentSql}: {conversation: Message[], currentSql: string}): Promise<string> {
     // Create a system message to instruct the model
     const systemMessage: Message = {
-      text: `You are an SQL editor assistant. Your task is to modify the current SQL query based on the conversation history.
+      text: `You are an SQL editor assistant.
+      
+      Your task is to modify the current SQL query based on the conversation history.
 IMPORTANT: Your response must ONLY contain the revised SQL code without any explanations, comments, or markdown formatting.
 Do not include \`\`\`sql or \`\`\` tags. Return only the raw SQL query.
 Current SQL:
@@ -90,7 +131,11 @@ ${currentSql}
 When providing SQL code, always use code blocks with the \`\`\`sql format. Never use inline code snippets.
 Be helpful, clear, and focus on generating accurate SQL queries that solve the user's problem.
 
-Always provide at least 1 code snippet in your response.`,
+Always provide at least 1 code snippet in your response.
+Even if you don't know the fields, or schema, or table names, or anything, just make up something that would be a valid query.
+
+Always assume the you are writing 'SELECT FROM' statements.
+`,
       date: new Date(),
       sender: 'AGENT'
     };

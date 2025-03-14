@@ -106,16 +106,16 @@ const Toolbar: React.FC<{ code: string; onApply: (code: string) => void }> = ({
 const Message: React.FC<MessageProps> = ({ text, sender, onApply }: MessageProps) => {
   return (
     <div
-      className={`message p-4 rounded-lg ${sender === "USER" ? "bg-carbon-blue-90" : "bg-carbon-gray-90"} text-carbon-gray-10 mb-4 relative`}
+      className={`message p-4 rounded-lg ${sender === "USER" ? "bg-carbon-gray-80" : "bg-carbon-gray-100"} text-carbon-gray-10 mb-4 relative`}
     >
       {/* Triangle for agent - left side */}
       {sender === "AGENT" && (
-        <div className="absolute top-1/2 -translate-y-1/2 -left-2 w-0 h-0 border-t-[6px] border-r-[6px] border-b-[6px] border-l-0 border-solid border-t-transparent border-r-carbon-gray-90 border-b-transparent"></div>
+        <div className="absolute top-1/2 -translate-y-1/2 -left-2 w-0 h-0 border-t-[6px] border-r-[6px] border-b-[6px] border-l-0 border-solid border-t-transparent border-r-carbon-gray-100 border-b-transparent"></div>
       )}
 
       {/* Triangle for user - right side */}
       {sender === "USER" && (
-        <div className="absolute top-1/2 -translate-y-1/2 -right-2 w-0 h-0 border-t-[6px] border-l-[6px] border-b-[6px] border-r-0 border-solid border-t-transparent border-l-carbon-blue-90 border-b-transparent"></div>
+        <div className="absolute top-1/2 -translate-y-1/2 -right-2 w-0 h-0 border-t-[6px] border-l-[6px] border-b-[6px] border-r-0 border-solid border-t-transparent border-l-carbon-gray-80 border-b-transparent"></div>
       )}
 
       <div className="prose prose-invert prose-sm max-w-none">
@@ -148,7 +148,7 @@ const Message: React.FC<MessageProps> = ({ text, sender, onApply }: MessageProps
                 </pre>
               ) : (
                 <code
-                  className="bg-[#1e2030] px-1 py-0.5 rounded text-carbon-blue-30"
+                  className="bg-[#1e2030] px-1 py-0.5 rounded text-carbon-gray-30"
                   {...props}
                 >
                   {children}

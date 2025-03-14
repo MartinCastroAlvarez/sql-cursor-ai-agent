@@ -24,6 +24,13 @@ const EXAMPLE_MESSAGE: Message = {
   sender: "AGENT",
 };
 
+// Example of a request from the agent to provide a table name
+const EXAMPLE_TABLE_REQUEST: Message = {
+  text: "Can you provide me with the table name for the users table?",
+  date: new Date(),
+  sender: "AGENT",
+};
+
 /**
  * Hook for managing conversation state
  * @returns [conversation, addMessage] - Array containing conversation and function to add messages
@@ -32,6 +39,7 @@ export function useConversation(): [Message[], (message: Message) => void] {
   const [conversation, setConversation] = useState<Message[]>([
     WELCOME_MESSAGE,
     EXAMPLE_MESSAGE,
+    EXAMPLE_TABLE_REQUEST,
   ]);
 
   const addMessage = useCallback((message: Message) => {

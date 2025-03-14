@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, forwardRef } from "react";
 import Message from "./Message";
 import Input from "./Input";
 import { Message as MessageType } from "./useConversation";
@@ -10,7 +10,7 @@ interface ChatProps {
   isLoading: boolean;
 }
 
-const Chat: React.FC<ChatProps> = ({ messages, onSend, onApply, isLoading }) => {
+const Chat = forwardRef<HTMLTextAreaElement, ChatProps>(({ messages, onSend, onApply, isLoading }, ref) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when messages change
@@ -35,17 +35,18 @@ const Chat: React.FC<ChatProps> = ({ messages, onSend, onApply, isLoading }) => 
       </div>
 
       {/* Input container - fixed at bottom */}
-      <div className="p-2">
-        {isLoading ? (
-          <div className="flex justify-center items-center p-4">
+      <div className="p-2 relative">
+        <Input ref={ref} onSubmit={onSend} disabled={isLoading} />
+        {isLoading && (
+          <div className="absolute inset-0 bg-carbon-gray-90/50 flex justify-center items-center backdrop-blur-sm">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
           </div>
-        ) : (
-          <Input onSubmit={onSend} />
         )}
       </div>
     </div>
   );
-};
+});
+
+Chat.displayName = 'Chat';
 
 export default Chat;

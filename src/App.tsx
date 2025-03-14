@@ -1,18 +1,18 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import Editor from "./Editor";
 import Chat from "./Chat";
-import { useConversation } from "./useConversation";
+import { useConversation, Message } from "./useConversation";
 import "tippy.js/dist/tippy.css";
 import "./tippy-theme.css";
 import { editorAgent, analystAgent } from "./Agent";
 
 const INITIAL_SQL = "-- Your SQL will appear here";
 
-
 const App: React.FC = () => {
   const [sql, setSql] = useState<string>(INITIAL_SQL);
   const [conversation, addMessage] = useConversation();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const chatInputRef = useRef<HTMLTextAreaElement>(null);
 
   const handleApply = useCallback(
     async (code: string) => {
@@ -25,6 +25,7 @@ const App: React.FC = () => {
         console.log(`Applying code: ${code}`);
       } finally {
         setIsLoading(false);
+        chatInputRef.current?.focus();
       }
     },
     [sql, isLoading],
@@ -37,15 +38,27 @@ const App: React.FC = () => {
       
       try {
         setIsLoading(true);
-        addMessage({
+
+        // Add the user's message to the conversation
+        const question: Message = {
           text,
           date: new Date(),
           sender: "USER",
-        });
-        const response = await analystAgent.ask({currentSql: sql, conversation: [...conversation, {text, date: new Date(), sender: "USER"}]});
+        };
+        addMessage(question);
+
+        // Ask the analyst agent for a response
+        const response = await analystAgent.ask({currentSql: sql, conversation: [...conversation, question]});
+
+        // Automatically process and apply any SQL changes from the agent's response
+        const newSql = await editorAgent.listen({conversation: [...conversation, question, response], currentSql: sql});
+
+        // Update the SQL state and the conversation
+        setSql(newSql);
         addMessage(response);
       } finally {
         setIsLoading(false);
+        chatInputRef.current?.focus();
       }
     },
     [addMessage, sql, conversation, isLoading],
@@ -65,7 +78,13 @@ const App: React.FC = () => {
           {/* Right column (Chat) - replaced Input with Chat */}
           <div className="w-full md:w-1/2 order-1 md:order-2 h-[calc(100vh-2rem)]">
             <div className="bg-gradient-to-b from-carbon-gray-90 to-carbon-gray-80 p-8 rounded-lg shadow-md h-full">
-              <Chat messages={conversation} onSend={handleSend} onApply={handleApply} isLoading={isLoading} />
+              <Chat 
+                messages={conversation} 
+                onSend={handleSend} 
+                onApply={handleApply} 
+                isLoading={isLoading}
+                ref={chatInputRef}
+              />
             </div>
           </div>
         </div>
