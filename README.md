@@ -25,6 +25,8 @@ The SQL Agent is the technical expert that:
 - Creates the correct SQL query that will get the information you need
 - Returns a working query that can be run on your database
 
+![example.png](./example.png)
+
 ## Installation
 
 Simply clone the repository and install the dependencies:
