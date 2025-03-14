@@ -25,6 +25,10 @@ The SQL Agent is the technical expert that:
 - Creates the correct SQL query that will get the information you need
 - Returns a working query that can be run on your database
 
+### Web Interface
+
+The web interface is a simple chat interface that allows you to communicate with the User Agent and the SQL Agent.
+
 ![example.png](./example.png)
 
 ## Installation
