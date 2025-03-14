@@ -36,7 +36,7 @@ const Chat = forwardRef<HTMLTextAreaElement, ChatProps>(({ messages, onSend, onA
 
       {/* Input container - fixed at bottom */}
       <div className="p-2 relative">
-        <Input ref={ref} onSubmit={onSend} disabled={isLoading} />
+        <Input ref={ref} onSubmit={onSend} />
         {isLoading && (
           <div className="absolute inset-0 bg-carbon-gray-90/50 flex justify-center items-center backdrop-blur-sm">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
