@@ -31,6 +31,8 @@ The web interface is a simple chat interface that allows you to communicate with
 
 ![example1.png](./example1.png)
 ![example2.png](./example2.png)
+![example3.png](./example3.png)
+![example4.png](./example4.png)
 
 ## Installation
 
