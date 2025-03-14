@@ -16,21 +16,22 @@ const Input: React.FC<InputProps> = ({ onSubmit }) => {
     }
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); // Prevent default to avoid new line
       handleInputSubmit();
     }
   };
 
   return (
-    <div className="flex w-full max-w-md bg-carbon-gray-100 rounded-lg overflow-hidden">
-      <input
-        type="text"
+    <div className="flex w-full bg-carbon-gray-100 rounded-lg overflow-hidden">
+      <textarea
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Describe the data you want to retrieve..."
-        className="flex-grow px-4 py-2 text-carbon-gray-10 bg-carbon-gray-100 border-none focus:outline-none focus:ring-0"
+        className="flex-grow px-4 py-2 text-carbon-gray-10 bg-carbon-gray-100 border-none focus:outline-none focus:ring-0 resize-none min-h-[72px]"
+        rows={3}
       />
       <button
         onClick={handleInputSubmit}

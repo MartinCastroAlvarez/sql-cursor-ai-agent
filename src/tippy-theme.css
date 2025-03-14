@@ -1,0 +1,21 @@
+.tippy-box[data-theme~='carbon'] {
+  background-color: #121619; /* Carbon dark gray */
+  color: #f4f4f4;
+  border-radius: 4px;
+}
+
+.tippy-box[data-theme~='carbon'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #121619;
+}
+
+.tippy-box[data-theme~='carbon'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: #121619;
+}
+
+.tippy-box[data-theme~='carbon'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #121619;
+}
+
+.tippy-box[data-theme~='carbon'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #121619;
+} 

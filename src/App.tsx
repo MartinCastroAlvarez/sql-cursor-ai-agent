@@ -2,6 +2,8 @@ import React, { useState, useCallback } from 'react';
 import Editor from './Editor';
 import Chat from './Chat';
 import { useConversation } from './useConversation';
+import 'tippy.js/dist/tippy.css';
+import './tippy-theme.css'; // We'll create this custom CSS file
 
 const App: React.FC = () => {
   const [sql, setSql] = useState<string>('');
@@ -47,7 +49,7 @@ const App: React.FC = () => {
           
           {/* Right column (Chat) - replaced Input with Chat */}
           <div className="w-full md:w-1/2 order-1 md:order-2 h-[calc(100vh-2rem)]">
-            <div className="bg-carbon-gray-80 rounded-lg shadow-md h-full">
+            <div className="bg-carbon-gray-80 p-8 rounded-lg shadow-md h-full">
               <Chat 
                 messages={conversation} 
                 onSendMessage={handleSendMessage} 
