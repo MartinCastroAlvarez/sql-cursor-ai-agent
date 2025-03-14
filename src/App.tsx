@@ -1,40 +1,48 @@
-import React, { useState, useCallback } from 'react';
-import Editor from './Editor';
-import Chat from './Chat';
-import { useConversation } from './useConversation';
-import 'tippy.js/dist/tippy.css';
-import './tippy-theme.css'; // We'll create this custom CSS file
+import React, { useState, useCallback } from "react";
+import Editor from "./Editor";
+import Chat from "./Chat";
+import { useConversation } from "./useConversation";
+import "tippy.js/dist/tippy.css";
+import "./tippy-theme.css"; // We'll create this custom CSS file
 
 const App: React.FC = () => {
-  const [sql, setSql] = useState<string>('');
+  const [sql, setSql] = useState<string>("");
   const [conversation, addMessage] = useConversation();
 
-  const handleSubmit = useCallback((query: string) => {
-    console.log(`User submitted: ${query}`);
-    // This would normally call an API or process the query
-    // For now, we'll just set some sample SQL based on the query
-    setSql(`-- SQL generated from: ${query}\nSELECT * FROM users WHERE name LIKE '%${query}%';`);
-  }, [setSql]);
+  const handleSubmit = useCallback(
+    (query: string) => {
+      console.log(`User submitted: ${query}`);
+      // This would normally call an API or process the query
+      // For now, we'll just set some sample SQL based on the query
+      setSql(
+        `-- SQL generated from: ${query}\nSELECT * FROM users WHERE name LIKE '%${query}%';`,
+      );
+    },
+    [setSql],
+  );
 
   // Handle sending a message in the chat
-  const handleSendMessage = useCallback((text: string) => {
-    // Add user message to conversation
-    addMessage({
-      text,
-      date: new Date(),
-      sender: "USER"
-    });
+  const handleSendMessage = useCallback(
+    (text: string) => {
+      // Add user message to conversation
+      addMessage({
+        text,
+        date: new Date(),
+        sender: "USER",
+      });
 
-    // Process the query to generate SQL
-    handleSubmit(text);
+      // Process the query to generate SQL
+      handleSubmit(text);
 
-    // Add agent response to conversation
-    addMessage({
-      text: `I've generated SQL for your query: \`\`\`sql\nSELECT * FROM users WHERE name LIKE '%${text}%';\n\`\`\``,
-      date: new Date(),
-      sender: "AGENT"
-    });
-  }, [addMessage, handleSubmit]);
+      // Add agent response to conversation
+      addMessage({
+        text: `I've generated SQL for your query: \`\`\`sql\nSELECT * FROM users WHERE name LIKE '%${text}%';\n\`\`\``,
+        date: new Date(),
+        sender: "AGENT",
+      });
+    },
+    [addMessage, handleSubmit],
+  );
 
   return (
     <div className="min-h-screen bg-carbon-gray-90 text-carbon-gray-10 flex flex-col">
@@ -46,14 +54,11 @@ const App: React.FC = () => {
               <Editor sql={sql} />
             </div>
           </div>
-          
+
           {/* Right column (Chat) - replaced Input with Chat */}
           <div className="w-full md:w-1/2 order-1 md:order-2 h-[calc(100vh-2rem)]">
-            <div className="bg-carbon-gray-80 p-8 rounded-lg shadow-md h-full">
-              <Chat 
-                messages={conversation} 
-                onSendMessage={handleSendMessage} 
-              />
+            <div className="bg-gradient-to-b from-carbon-gray-90 to-carbon-gray-80 p-8 rounded-lg shadow-md h-full">
+              <Chat messages={conversation} onSendMessage={handleSendMessage} />
             </div>
           </div>
         </div>

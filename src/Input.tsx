@@ -1,23 +1,23 @@
-import React, { useState, KeyboardEvent } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, KeyboardEvent } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 interface InputProps {
   onSubmit: (query: string) => void;
 }
 
 const Input: React.FC<InputProps> = ({ onSubmit }) => {
-  const [inputValue, setInputValue] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string>("");
 
   const handleInputSubmit = () => {
     if (inputValue.trim()) {
       onSubmit(inputValue);
-      setInputValue('');
+      setInputValue("");
     }
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault(); // Prevent default to avoid new line
       handleInputSubmit();
     }

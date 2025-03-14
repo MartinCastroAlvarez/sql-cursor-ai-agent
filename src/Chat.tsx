@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import Message from './Message';
-import Input from './Input';
-import { Message as MessageType } from './useConversation';
+import React, { useEffect, useRef } from "react";
+import Message from "./Message";
+import Input from "./Input";
+import { Message as MessageType } from "./useConversation";
 
 interface ChatProps {
   messages: MessageType[];
@@ -13,19 +13,19 @@ const Chat: React.FC<ChatProps> = ({ messages, onSendMessage }) => {
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
     <div className="flex flex-col h-full">
       {/* Messages container - scrollable */}
-      <div className="flex-grow overflow-y-auto mb-4 p-2">
+      <div className="flex-grow overflow-y-auto mb-4 p-4">
         {messages.map((message, index) => (
-          <div 
-            key={index} 
-            className={`${message.sender === 'USER' ? 'ml-auto' : 'mr-auto'} max-w-[80%]`}
+          <div
+            key={index}
+            className={`${message.sender === "USER" ? "ml-auto" : "mr-auto"} max-w-[80%]`}
           >
-            <Message text={message.text} />
+            <Message text={message.text} sender={message.sender} />
           </div>
         ))}
         {/* Empty div for scroll reference */}

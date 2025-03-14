@@ -27,7 +27,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build:ts": "tsc",
+    "build:react": "react-scripts build",
+    "build:prettier": "prettier --write src",
+    "build:eslint": "eslint src --fix",
+    "build": "npm run build:ts && npm run build:eslint&& npm run build:prettier && npm run build:react",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
